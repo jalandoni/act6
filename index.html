@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Register</title>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
+        integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+   
+    <style>
+        .close{
+        font-size: 16px;
+    }
+    .close p{
+        float: right!important;
+
+    }
+    .btn{
+        margin-right: 2px;
+        width:90px;
+        height: 45px;
+
+    }
+    </style>
+</head>
+
+<body>
+    <div class="row classList">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 ">
+            <br><br>
+            <div class=" card">
+                <br>
+                <center>
+                    <button type="button" class="btn btn-primary btn-outline-success" id="create" data-toggle="button"
+                        aria-pressed="false" autocomplete="off">
+                        ADD
+                    </button>
+                    <br>
+                    <br>
+                    <div class="container">
+                        <table id="table" class="table table-bordered">
+                            <div class="text-center">
+                                <thead>
+                                    <tr class="table-info">
+                                        <th>Products</th>
+                                        <th>Quantity</th>
+                                        <th>Priority</th>
+                                        <th>action</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="body">
+                                    <tr id="inform">
+                                        
+                                    </tr>
+
+                                </tbody>
+
+                        </table>
+                </center>
+
+            </div>
+        </div>
+    </div>
+    </div>
+    <br><br>
+    <div class="form row">
+
+        <div class="col-md-4"></div>
+        <div class="col-md-4 card">
+            <br>
+            <br>
+            <div class="close">
+                <p>x</p>
+            </div>
+            <div class="form-group">
+                <label for="fname">Item</label>
+                <input type="text" id="item" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="lname">Quantiy</label>
+                <input type="text" id="qty" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="cyr">Priority</label>
+                <input type="text" id="pyr" class="form-control"  required>
+            </div>
+            <center>
+                <br>
+                <button type="button" id="save" class="btn btn-primary save btn-outline-success" data-toggle="button"
+                    aria-pressed="false" autocomplete="off">
+                    Save
+                </button>
+            </center>
+            <br>
+        </div>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
+        crossorigin="anonymous"></script>
+    <script>
+
+
+        $(document).ready(function () {
+            hideForm();
+            var id = 0;
+            var row = null;
+           
+
+            $('body').bootstrapMaterialDesign();
+
+            $("#create").click(function () {
+                showForm()
+
+            });
+
+            function showForm() {
+                $("input").val("");
+                $(".form").show();
+                $(".classList").hide();
+                
+
+            }
+            function hideForm() {
+                $(".form").hide();
+                $(".classList").show();  
+                $(edit).hide();
+                $(del).hide();    
+                           
+                         
+            }
+
+
+
+
+            var edit = $("<button>",{
+                        class:"btn btn-primary btn-sm update btn-outline-success",
+                        id: "btn_"+ id,     
+                                              
+                    })
+
+
+            var del = $("<button>",{
+                        class:"btn btn-primary btn-sm del btn-outline-success",
+                        id: "btn_"+ id, 
+                              
+                    })
+
+
+
+            $(".save").click(function () {
+                var info = ["name", "qty", "pyr"];               
+                var name = $("#item").val();
+                var qty = $("#qty").val();
+                var pyr = $("#pyr").val();          
+            $.ajax({
+                url: "http://localhost:3000",
+                type: "POST",
+                crossDomain:true,
+                data: JSON.stringify({ name1:name, qty1: qty, pyr1:pyr }),
+                success: function (data) {                   
+                    Swal.fire({
+                            type: 'success',
+                            title: 'Congrats!',
+                            text: 'You are successfully enrolled!'
+                        })
+                }
+              
+
+            });
+      
+
+
+
+                if ( name== "" || pyr == "") {
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'All inputs is required!'
+                    })
+
+                } else {
+
+                    row = $("<tr>", {
+                        name: name,
+                        qty: qty,
+                        pyr: pyr,
+                       
+                    });
+
+                    for(let i = 0; i < info.length; i++) {
+                        var col =$("<td>").text($(row).attr(info[i])).appendTo($(row));
+      
+                    }
+
+                    var action =$("<td>");
+                    $(row).append(action);
+                    $(action).append($(edit).text("Edit"));
+                    $(action).append($(del).text("Delete"));
+                    $("tbody").append($(row));
+                    hideForm();
+                }
+
+                $(row).on("click" , ".del", function(){
+          		 $(row).remove();
+       			});
+
+       			$(row).on("click" , ".update", function(){
+          		 showForm();
+       			});
+       
+                     
+
+            	$(row).hover(function(event){
+            		$(edit).show();
+                    $(del).show();  
+                  } , function(){
+                    $(edit).hide();
+                    $(del).hide();  
+                    	
+            	});
+            	
+
+            });
+
+            $(".close").click(function () {
+                hideForm();
+            })
+        });
+
+    </script>
+
+
+
+</body>
+
+</html>
